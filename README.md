@@ -1,499 +1,1584 @@
-# Lab Record
+# User Interface Design Using Flutter Lab
 
 ---
 
-# Program 9: ReactJS – Hooks and Sharing Data Between Components
+# Experiment 1
 
-## 9a. Importance of Hooks
+## 1(a) Install Flutter and Dart SDK
 
 ### Aim
-To write a React program that shows the importance of Hooks by building a counter first as a **class component** (without hooks) and then as a **functional component** (with the `useState` hook).
+To install the Flutter and Dart SDK and set up the development environment.
 
 ### Description
-Hooks are special functions in React that let functional components use state and other React features without writing classes.
-
-| Hook | Purpose |
-|---|---|
-| `useState()` | Manages local state |
-| `useEffect()` | Handles side effects (e.g., fetching data) |
-| `useContext()` | Accesses global/shared state |
-| `useReducer()`, `useRef()` | Complex state logic, DOM references |
-
-**Why hooks are important:**
-- Less code than class components (no constructor, no `this`)
-- Logic is easier to read and reuse
-- State can be used directly inside functional components
+- **Flutter** is an open-source UI toolkit by Google used to build Android, iOS, web and desktop apps from a single codebase.
+- **Dart** is the object-oriented programming language used to write Flutter apps. The Dart SDK comes bundled with Flutter, so it need not be installed separately.
 
 ### Procedure
-1. Create a new React app and start it:
-```bash
-npx create-react-app react-hooks-demo
-cd react-hooks-demo
-npm start
-```
-The app runs at `http://localhost:3000`.
+1. **System requirements (Windows):** Windows 10/11 (64-bit), at least 1.64 GB disk space, Git and Chrome installed.
+2. **Download** the latest stable Flutter SDK zip from https://flutter.dev/docs/get-started/install.
+3. **Extract** the zip to a permanent location such as `C:\src\flutter` (not `C:\Program Files`).
+4. **Set the PATH:** Environment Variables → System variables → Path → Edit → add `C:\src\flutter\bin`.
+5. **Verify:** open Command Prompt and run
+   ```
+   flutter doctor
+   ```
+6. **Install Android Studio** (for the Android SDK and emulator) and optionally VS Code.
+7. **Install IDE plugins:** install the Flutter plugin (Dart is installed automatically) in VS Code or Android Studio.
+8. **Create an emulator:** Android Studio → AVD Manager → create a virtual device (e.g., Pixel 5) → start it.
+9. **Run the first app:**
+   ```
+   flutter create my_app
+   cd my_app
+   flutter run
+   ```
 
-2. Create `src/CounterClass.js` (without hooks).
-3. Create `src/CounterHook.js` (with hooks).
-4. Update `src/App.js` to display both components.
+### Output
+`flutter doctor` shows green checkmarks, and the default counter app runs on the emulator.
+
+*(Paste screenshot here)*
+
+### Result
+Flutter and Dart SDK were installed and verified successfully.
+
+---
+
+## 1(b) Simple Dart Program to Understand the Language Basics
+
+### Aim
+To write a simple Dart program covering variables, conditions, loops and functions.
+
+### Description
+Dart programs start execution from `main()`. The basics used here are variables with types (`String`, `int`), the `if-else` statement, the `for` loop and a user-defined function.
 
 ### Program
+```dart
+void main() {
+  String name = 'John';
+  int age = 20;
+  print('Name: $name, Age: $age');
 
-**src/CounterClass.js** (without hooks)
-```jsx
-import React, { Component } from "react";
-
-class CounterClass extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { count: 0 };
+  if (age >= 18) {
+    print('$name is an adult.');
+  } else {
+    print('$name is a minor.');
   }
 
-  increment = () => {
-    this.setState({ count: this.state.count + 1 });
-  };
+  for (int i = 1; i <= 3; i++) {
+    print('Count: $i');
+  }
 
-  render() {
-    return (
-      <div>
-        <h2>Class Component</h2>
-        <p>Count: {this.state.count}</p>
-        <button onClick={this.increment}>Increase</button>
-      </div>
+  greet(name);
+}
+
+void greet(String name) {
+  print('Hello, $name!');
+}
+```
+
+### Output
+```
+Name: John, Age: 20
+John is an adult.
+Count: 1
+Count: 2
+Count: 3
+Hello, John!
+```
+
+### Result
+The Dart program was executed successfully.
+
+---
+
+# Experiment 2
+
+## 2(a) Explore Various Flutter Widgets (Text, Image, Container, etc.)
+
+### Aim
+To explore basic Flutter widgets such as Text, Image, Container and Icon.
+
+### Description
+Everything in Flutter is a widget.
+- **Text:** displays styled text.
+- **Image:** displays images from network, assets or files.
+- **Container:** a box that supports padding, margin, color and decoration.
+- **Icon:** displays built-in material icons.
+
+### Program
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text('Flutter Widgets Demo')),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Text widget
+              Text(
+                'Welcome to Flutter!',
+                style: TextStyle(
+                  fontSize: 24,
+                  color: Colors.deepPurple,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 20),
+
+              // Image widget
+              Image.network(
+                'https://upload.wikimedia.org/wikipedia/commons/1/17/Google-flutter-logo.png',
+                width: 200,
+                errorBuilder: (c, e, s) => Text('Failed to load image'),
+              ),
+              SizedBox(height: 20),
+
+              // Container widget
+              Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.amber[200],
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text('This is a Container'),
+              ),
+              SizedBox(height: 20),
+
+              // Icon widgets
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.favorite, color: Colors.red, size: 30),
+                  SizedBox(width: 10),
+                  Icon(Icons.star, color: Colors.orange, size: 30),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
-export default CounterClass;
-```
-
-**src/CounterHook.js** (with hooks)
-```jsx
-import React, { useState } from "react";
-
-function CounterHook() {
-  const [count, setCount] = useState(0);
-
-  return (
-    <div>
-      <h2>Functional Component with Hook</h2>
-      <p>Count: {count}</p>
-      <button onClick={() => setCount(count + 1)}>Increase</button>
-    </div>
-  );
-}
-export default CounterHook;
-```
-
-**src/App.js**
-```jsx
-import React from "react";
-import CounterClass from "./CounterClass";
-import CounterHook from "./CounterHook";
-
-function App() {
-  return (
-    <div>
-      <h1>React Hooks Example</h1>
-      <CounterClass />
-      <CounterHook />
-    </div>
-  );
-}
-export default App;
 ```
 
 ### Output
+The screen shows the styled heading, the Flutter logo, an amber container with text, and two icons.
 
-**Initial screen**
-```
-React Hooks Example
-
-Class Component
-Count: 0
-[ Increase ]
-
-Functional Component with Hook
-Count: 0
-[ Increase ]
-```
-
-**After clicking "Increase" once in each section**
-```
-Class Component                  Functional Component with Hook
-Count: 1                         Count: 1
-```
-The count increases by 1 on every click in both components.
+*(Paste screenshot here)*
 
 ### Result
-Both components produce the same output, but the hook version needs much less code. The program was executed successfully.
+Basic Flutter widgets were explored successfully.
 
 ---
 
-## 9b. Sharing Data Between Components
+## 2(b) Layout Structures using Row, Column and Stack
 
 ### Aim
-To create a React application that demonstrates data sharing between components using props, callback functions and lifted state.
+To implement different layouts using Row, Column and Stack widgets.
 
 ### Description
-React follows **unidirectional data flow** (parent → child). When two child components need to share data, the common parent component holds the shared state. This technique is called **Lifting State Up**.
+- **Row:** arranges children horizontally.
+- **Column:** arranges children vertically.
+- **Stack:** places children on top of each other (layered).
 
-| Direction | Technique |
-|---|---|
-| Parent → Child | Props |
-| Child → Parent | Callback functions |
-| Sibling → Sibling | Shared state in the parent |
+### Program
+```dart
+import 'package:flutter/material.dart';
 
-In this program, **ChildA** sends a message to the **Parent** through a callback function, and the Parent passes it to **ChildB** through props.
+void main() => runApp(MyApp());
 
-### Procedure
-1. Create a new React app and start it:
-```bash
-npx create-react-app share-data-demo
-cd share-data-demo
-npm start
+class MyApp extends StatelessWidget {
+  Widget box(String label, Color color) {
+    return Container(
+      margin: EdgeInsets.all(4),
+      padding: EdgeInsets.all(16),
+      color: color,
+      child: Text(label, style: TextStyle(color: Colors.white)),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text('Row, Column & Stack')),
+        body: ListView(
+          padding: EdgeInsets.all(16),
+          children: [
+            Text('Column Layout'),
+            Column(children: [
+              box('Box 1', Colors.red),
+              box('Box 2', Colors.green),
+            ]),
+            SizedBox(height: 20),
+
+            Text('Row Layout'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                box('A', Colors.purple),
+                box('B', Colors.teal),
+                box('C', Colors.indigo),
+              ],
+            ),
+            SizedBox(height: 20),
+
+            Text('Stack Layout'),
+            Container(
+              height: 200,
+              color: Colors.grey[300],
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(width: 180, height: 180, color: Colors.yellow),
+                  Container(width: 120, height: 120, color: Colors.blue),
+                  Container(width: 60, height: 60, color: Colors.red),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 ```
-2. Create three components inside `src/`: `ParentComponent.js`, `ChildA.js`, `ChildB.js`.
-3. Update `App.js` to include the parent component.
-4. Run the app with `npm start`. (If you created the project with Vite, use `npm run dev` instead.)
+
+### Output
+Boxes stacked vertically (Column), boxes side by side (Row), and three overlapping squares (Stack).
+
+*(Paste screenshot here)*
+
+### Result
+Row, Column and Stack layouts were implemented successfully.
+
+---
+
+# Experiment 3
+
+## 3(a) Responsive UI that Adapts to Different Screen Sizes
+
+### Aim
+To design a responsive UI that adapts to different screen sizes.
+
+### Description
+A responsive UI changes its layout based on the available screen size. `LayoutBuilder` gives the available width (`constraints.maxWidth`), and the layout is chosen using that width. Here, one box is shown on mobile, two on tablet and three on desktop.
+
+### Program
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text('Responsive UI')),
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            if (constraints.maxWidth < 600) {
+              return layout('Mobile', 1);
+            } else if (constraints.maxWidth < 900) {
+              return layout('Tablet', 2);
+            } else {
+              return layout('Desktop', 3);
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget layout(String title, int count) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text('$title Layout',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+          SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(
+              count,
+              (i) => Container(
+                margin: EdgeInsets.all(8),
+                width: 100,
+                height: 100,
+                color: Colors.primaries[i],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+
+### Output
+The layout changes between Mobile (1 box), Tablet (2 boxes) and Desktop (3 boxes) as the window width changes.
+
+*(Paste screenshots here)*
+
+### Result
+A responsive UI was designed and executed successfully.
+
+---
+
+## 3(b) Media Queries and Breakpoints
+
+### Aim
+To implement MediaQuery and breakpoints for responsiveness.
+
+### Description
+`MediaQuery.of(context).size` gives the screen width and height. **Breakpoints** are width limits (for example 600 and 900) at which the UI changes.
+
+### Program
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text('MediaQuery & Breakpoints')),
+        body: ResponsiveWidget(),
+      ),
+    );
+  }
+}
+
+class ResponsiveWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
+    if (width < 600) {
+      return box('Mobile Layout', Colors.blue, 150);
+    } else if (width < 900) {
+      return box('Tablet Layout', Colors.green, 300);
+    } else {
+      return box('Desktop Layout', Colors.orange, 450);
+    }
+  }
+
+  Widget box(String text, Color color, double size) {
+    return Center(
+      child: Container(
+        width: size,
+        height: size,
+        color: color,
+        child: Center(
+          child: Text(text, style: TextStyle(color: Colors.white, fontSize: 20)),
+        ),
+      ),
+    );
+  }
+}
+```
+
+### Output
+A blue box (width < 600), a green box (600 to 900) or an orange box (width > 900) is shown, with its size growing accordingly.
+
+*(Paste screenshots here)*
+
+### Result
+MediaQuery and breakpoints were implemented successfully.
+
+---
+
+# Experiment 4
+
+## 4(a) Navigation between Screens using Navigator
+
+### Aim
+To set up navigation between different screens using Navigator.
+
+### Description
+Flutter manages screens as a stack of routes. `Navigator.push()` opens a new screen and `Navigator.pop()` returns to the previous one.
+
+### Program
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(home: FirstScreen());
+  }
+}
+
+class FirstScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('First Screen')),
+      body: Center(
+        child: ElevatedButton(
+          child: Text('Go to Second Screen'),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SecondScreen()),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class SecondScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Second Screen')),
+      body: Center(
+        child: ElevatedButton(
+          child: Text('Go Back'),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+    );
+  }
+}
+```
+
+### Output
+Tapping the button on the First Screen opens the Second Screen, and tapping "Go Back" returns to the First Screen.
+
+*(Paste screenshots here)*
+
+### Result
+Navigation between screens using Navigator was implemented successfully.
+
+---
+
+## 4(b) Navigation with Named Routes
+
+### Aim
+To implement navigation using named routes.
+
+### Description
+Named routes use string names (such as `'/second'`) defined in a `routes` map in `MaterialApp`. Navigation is done with `Navigator.pushNamed()`, which keeps the code clean and organized.
+
+### Program
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      initialRoute: '/',
+      routes: {
+        '/': (context) => FirstScreen(),
+        '/second': (context) => SecondScreen(),
+      },
+    );
+  }
+}
+
+class FirstScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('First Screen')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () => Navigator.pushNamed(context, '/second'),
+          child: Text('Go to Second Screen'),
+        ),
+      ),
+    );
+  }
+}
+
+class SecondScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Second Screen')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text('Go Back'),
+        ),
+      ),
+    );
+  }
+}
+```
+
+### Output
+The button opens the Second Screen using the route `/second`, and "Go Back" returns to `/`.
+
+*(Paste screenshots here)*
+
+### Result
+Navigation with named routes was implemented successfully.
+
+---
+
+# Experiment 5
+
+## 5(a) Stateful and Stateless Widgets
+
+### Aim
+To learn about stateless and stateful widgets in Flutter.
+
+### Description
+- **Stateless widget:** immutable, cannot change after it is built. Used for static content such as `Text` and `Icon`.
+- **Stateful widget:** mutable, can change at runtime using `setState()`. Used for dynamic content such as counters and forms.
+
+| Stateless Widget | Stateful Widget |
+|---|---|
+| Does not change after it is built | Can change during runtime |
+| No internal state | Has internal state |
+| Overrides only `build()` | Has a `State` class with `build()` |
+| Does not use `setState()` | Uses `setState()` to refresh the UI |
+
+### Program
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text("Stateless vs Stateful")),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            MyStatelessWidget(),
+            SizedBox(height: 30),
+            MyStatefulWidget(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Stateless Widget
+class MyStatelessWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Text("I am Stateless", style: TextStyle(fontSize: 20));
+  }
+}
+
+// Stateful Widget
+class MyStatefulWidget extends StatefulWidget {
+  @override
+  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
+}
+
+class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  int counter = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text("I am Stateful\nCounter: $counter", style: TextStyle(fontSize: 18)),
+        ElevatedButton(
+          onPressed: () => setState(() => counter++),
+          child: Text("Add Count"),
+        ),
+      ],
+    );
+  }
+}
+```
+
+### Output
+"I am Stateless" never changes. "I am Stateful" shows `Counter: 0`, and each tap on **Add Count** increases it by 1.
+
+*(Paste screenshot here)*
+
+### Result
+The difference between stateless and stateful widgets was understood and implemented successfully.
+
+---
+
+## 5(b) State Management using setState and Provider
+
+### Aim
+To implement state management in Flutter using `setState` and `Provider`.
+
+### Description
+- **setState:** manages local state inside one widget. Best for small things such as counters and toggles.
+- **Provider:** manages global state shared across many widgets. The state is kept in a class extending `ChangeNotifier`, and `notifyListeners()` rebuilds all listening widgets. Best for a cart, login or theme.
+
+### Add the dependency in `pubspec.yaml`
+```yaml
+dependencies:
+  provider: ^6.0.5
+```
+Then run `flutter pub get`.
+
+### Program
+```dart
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+void main() {
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => CartProvider(),
+      child: MyApp(),
+    ),
+  );
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text("Cart Demo"),
+            bottom: TabBar(tabs: [
+              Tab(text: "setState"),
+              Tab(text: "Provider"),
+            ]),
+          ),
+          body: TabBarView(children: [LocalCart(), GlobalCart()]),
+        ),
+      ),
+    );
+  }
+}
+
+// 1. setState (Local state)
+class LocalCart extends StatefulWidget {
+  @override
+  _LocalCartState createState() => _LocalCartState();
+}
+
+class _LocalCartState extends State<LocalCart> {
+  int apples = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(mainAxisSize: MainAxisSize.min, children: [
+        Text("Apples: $apples", style: TextStyle(fontSize: 24)),
+        ElevatedButton(
+          onPressed: () => setState(() => apples++),
+          child: Text("Add Apple"),
+        ),
+      ]),
+    );
+  }
+}
+
+// 2. Provider (Global state)
+class CartProvider extends ChangeNotifier {
+  int items = 0;
+
+  void add() {
+    items++;
+    notifyListeners();
+  }
+}
+
+class GlobalCart extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final cart = Provider.of<CartProvider>(context);
+    return Center(
+      child: Column(mainAxisSize: MainAxisSize.min, children: [
+        Text("Cart Items: ${cart.items}", style: TextStyle(fontSize: 24)),
+        ElevatedButton(
+          onPressed: cart.add,
+          child: Text("Add Item"),
+        ),
+      ]),
+    );
+  }
+}
+```
+
+### Output
+Two tabs, **setState** and **Provider**. Each button tap increases the apple count or the cart item count respectively.
+
+*(Paste screenshot here)*
+
+### Result
+State management using `setState` and `Provider` was implemented successfully.
+
+---
+
+# Experiment 6
+
+## 6(a) Create Custom Widgets for Specific UI Elements
+
+### Aim
+To create reusable custom widgets in Flutter.
+
+### Description
+A custom widget is a reusable UI component defined once and used many times with different data. It reduces code duplication and keeps the app organized. Here `ProfileCard` and `ActionButton` are custom widgets.
+
+### Program
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text("Profile App")),
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ProfileCard(name: "John Doe", email: "john.doe@example.com"),
+              SizedBox(height: 20),
+              ActionButton(
+                text: "Follow",
+                color: Colors.green,
+                onPressed: () => print("Follow button clicked"),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Custom Profile Card Widget
+class ProfileCard extends StatelessWidget {
+  final String name;
+  final String email;
+
+  ProfileCard({required this.name, required this.email});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 4,
+      margin: EdgeInsets.all(12),
+      child: ListTile(
+        leading: CircleAvatar(child: Icon(Icons.person)),
+        title: Text(name, style: TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Text(email),
+      ),
+    );
+  }
+}
+
+// Custom Button Widget
+class ActionButton extends StatelessWidget {
+  final String text;
+  final Color color;
+  final VoidCallback onPressed;
+
+  ActionButton({required this.text, required this.color, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(backgroundColor: color),
+      onPressed: onPressed,
+      child: Text(text),
+    );
+  }
+}
+```
+
+### Output
+A profile card showing the name and email with an avatar, and a green **Follow** button below it.
+
+*(Paste screenshot here)*
+
+### Result
+Custom widgets were created and used successfully.
+
+---
+
+## 6(b) Styling using Themes and Custom Styles
+
+### Aim
+To apply styling using themes and custom styles.
+
+### Description
+`ThemeData` defines colors, fonts and widget styles once, and all widgets follow it automatically, so the design stays consistent. This program defines a light theme and a dark theme and switches between them.
+
+### Program
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool isDark = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(brightness: Brightness.light, primarySwatch: Colors.blue),
+      darkTheme: ThemeData(brightness: Brightness.dark, primarySwatch: Colors.deepPurple),
+      themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
+      home: Scaffold(
+        appBar: AppBar(title: Text("Theme Demo")),
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("Hello Flutter!", style: TextStyle(fontSize: 24)),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () => setState(() => isDark = !isDark),
+                child: Text(isDark ? "Switch to Light" : "Switch to Dark"),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+### Output
+The button toggles the whole app between the light (blue) theme and the dark (purple) theme.
+
+*(Paste screenshots here)*
+
+### Result
+Styling using themes was implemented successfully.
+
+---
+
+# Experiment 7
+
+## 7(a) Design a Form with Various Input Fields
+
+### Aim
+To design a form with various input fields.
+
+### Description
+A `Form` widget groups input fields. `TextFormField` takes text input, `Radio` buttons select one option, and a `GlobalKey<FormState>` is used to access the form's state.
+
+### Program
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(home: StudentForm());
+  }
+}
+
+class StudentForm extends StatefulWidget {
+  @override
+  _StudentFormState createState() => _StudentFormState();
+}
+
+class _StudentFormState extends State<StudentForm> {
+  final _formKey = GlobalKey<FormState>();
+  String _name = '';
+  String _rollNo = '';
+  String _gender = 'Male';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Student Details Form')),
+      body: Padding(
+        padding: EdgeInsets.all(16),
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            children: [
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Name'),
+                onSaved: (v) => _name = v ?? '',
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Roll No'),
+                keyboardType: TextInputType.number,
+                onSaved: (v) => _rollNo = v ?? '',
+              ),
+              SizedBox(height: 20),
+              Text('Gender:'),
+              RadioListTile<String>(
+                title: Text('Male'),
+                value: 'Male',
+                groupValue: _gender,
+                onChanged: (v) => setState(() => _gender = v!),
+              ),
+              RadioListTile<String>(
+                title: Text('Female'),
+                value: 'Female',
+                groupValue: _gender,
+                onChanged: (v) => setState(() => _gender = v!),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  _formKey.currentState!.save();
+                  showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                      title: Text('Submitted Info'),
+                      content: Text('Name: $_name\nRoll No: $_rollNo\nGender: $_gender'),
+                    ),
+                  );
+                },
+                child: Text('Submit'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+### Output
+A form with Name, Roll No and Gender fields. On **Submit**, a dialog shows the entered details.
+
+*(Paste screenshot here)*
+
+### Result
+A form with various input fields was designed successfully.
+
+---
+
+## 7(b) Form Validation and Error Handling
+
+### Aim
+To implement form validation and error handling.
+
+### Description
+Each `TextFormField` has a `validator` function. It returns an error message if the input is invalid, or `null` if it is valid. Calling `_formKey.currentState!.validate()` checks all fields and shows the error messages.
+
+### Program
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(home: FormValidationPage());
+  }
+}
+
+class FormValidationPage extends StatefulWidget {
+  @override
+  _FormValidationPageState createState() => _FormValidationPageState();
+}
+
+class _FormValidationPageState extends State<FormValidationPage> {
+  final _formKey = GlobalKey<FormState>();
+
+  String? validateName(String? value) {
+    if (value == null || value.isEmpty) return 'Name is required';
+    return null;
+  }
+
+  String? validateEmail(String? value) {
+    if (value == null || value.isEmpty) return 'Email is required';
+    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+      return 'Enter a valid email';
+    }
+    return null;
+  }
+
+  void submitForm() {
+    if (_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Form submitted successfully!')),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Form Validation')),
+      body: Padding(
+        padding: EdgeInsets.all(16),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Name'),
+                validator: validateName,
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Email'),
+                validator: validateEmail,
+              ),
+              SizedBox(height: 32),
+              ElevatedButton(onPressed: submitForm, child: Text('Submit')),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+### Output
+- Empty fields show "Name is required" or "Email is required" in red.
+- An invalid email shows "Enter a valid email".
+- Valid input shows the snackbar "Form submitted successfully!".
+
+*(Paste screenshots here)*
+
+### Result
+Form validation and error handling were implemented successfully.
+
+---
+
+# Experiment 8
+
+## 8(a) Add Animations to UI Elements using Flutter's Animation Framework
+
+### Aim
+To add animations to UI elements using Flutter's animation framework.
+
+### Description
+Flutter provides implicit animation widgets such as `AnimatedContainer` and `AnimatedOpacity`. They automatically animate between old and new values over a given `duration` when the state changes through `setState()`.
+
+### Program
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(home: AnimationPage());
+  }
+}
+
+class AnimationPage extends StatefulWidget {
+  @override
+  _AnimationPageState createState() => _AnimationPageState();
+}
+
+class _AnimationPageState extends State<AnimationPage> {
+  bool _big = false;
+  bool _visible = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Flutter Animations")),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            GestureDetector(
+              onTap: () => setState(() => _big = !_big),
+              child: AnimatedContainer(
+                duration: Duration(seconds: 1),
+                width: _big ? 200 : 100,
+                height: _big ? 200 : 100,
+                color: _big ? Colors.blue : Colors.red,
+                child: Center(
+                  child: Text("Tap Me", style: TextStyle(color: Colors.white)),
+                ),
+              ),
+            ),
+            SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: () => setState(() => _visible = !_visible),
+              child: Text("Toggle Text"),
+            ),
+            AnimatedOpacity(
+              opacity: _visible ? 1.0 : 0.0,
+              duration: Duration(seconds: 1),
+              child: Text("Hello Flutter!", style: TextStyle(fontSize: 22)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+### Output
+Tapping the box smoothly changes its size and color (red ↔ blue). The **Toggle Text** button fades the text in and out.
+
+*(Paste screenshots here)*
+
+### Result
+Animations were added to UI elements successfully.
+
+---
+
+## 8(b) Different Types of Animations (Fade, Slide, etc.)
+
+### Aim
+To experiment with different types of animations such as fade, slide and scale.
+
+### Description
+- **Fade:** `AnimatedOpacity`
+- **Slide:** `AnimatedPositioned` (inside a `Stack`)
+- **Scale:** `AnimatedContainer` (changing the width and height)
+
+All three animate together when the floating button is pressed.
+
+### Program
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(home: AnimationExample());
+  }
+}
+
+class AnimationExample extends StatefulWidget {
+  @override
+  _AnimationExampleState createState() => _AnimationExampleState();
+}
+
+class _AnimationExampleState extends State<AnimationExample> {
+  bool _visible = true;
+  bool _moved = false;
+  bool _scaled = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Fade, Slide & Scale')),
+      body: Stack(
+        children: [
+          // Slide
+          AnimatedPositioned(
+            duration: Duration(seconds: 1),
+            curve: Curves.easeInOut,
+            top: _moved ? 300 : 100,
+            left: 100,
+            // Fade
+            child: AnimatedOpacity(
+              duration: Duration(seconds: 1),
+              opacity: _visible ? 1.0 : 0.0,
+              // Scale
+              child: AnimatedContainer(
+                duration: Duration(seconds: 1),
+                width: _scaled ? 150 : 100,
+                height: _scaled ? 150 : 100,
+                color: Colors.teal,
+                child: Center(
+                  child: Text('Animate Me', style: TextStyle(color: Colors.white)),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.play_arrow),
+        onPressed: () {
+          setState(() {
+            _visible = !_visible; // fade
+            _moved = !_moved;     // slide
+            _scaled = !_scaled;   // scale
+          });
+        },
+      ),
+    );
+  }
+}
+```
+
+### Output
+On pressing the play button, the teal box slides down, grows in size and fades. Pressing it again reverses the animation.
+
+*(Paste screenshots here)*
+
+### Result
+Fade, slide and scale animations were implemented successfully.
+
+---
+
+# Experiment 9
+
+## 9(a) Fetch Data from a REST API
+
+### Aim
+To fetch data from a REST API in Flutter.
+
+### Description
+The `http` package is used to send HTTP requests. `http.get()` fetches data, `json.decode()` converts the JSON response to Dart objects, and `FutureBuilder` shows a loading indicator, an error or the data based on the state of the Future.
+
+### Add the dependency in `pubspec.yaml`
+```yaml
+dependencies:
+  http: ^1.2.0
+```
+Then run `flutter pub get`.
+
+### Program
+```dart
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(home: ApiDemoPage());
+  }
+}
+
+class ApiDemoPage extends StatelessWidget {
+  Future<String> fetchAdvice() async {
+    final response =
+        await http.get(Uri.parse("https://api.adviceslip.com/advice"));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return data["slip"]["advice"];
+    } else {
+      throw Exception("Failed to load advice");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Fetch Data from REST API")),
+      body: Center(
+        child: FutureBuilder<String>(
+          future: fetchAdvice(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Text("Error: ${snapshot.error}");
+            } else {
+              return Padding(
+                padding: EdgeInsets.all(16),
+                child: Text(
+                  snapshot.data!,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              );
+            }
+          },
+        ),
+      ),
+    );
+  }
+}
+```
+
+### Output
+A loading spinner is shown first, followed by a random piece of advice fetched from the API.
+
+*(Paste screenshot here)*
+
+### Result
+Data was fetched from a REST API successfully.
+
+---
+
+## 9(b) Display the Fetched Data in a Meaningful Way in the UI
+
+### Aim
+To display data fetched from a REST API as a list in the UI.
+
+### Description
+A list of posts is fetched from the JSONPlaceholder API and displayed using `ListView.builder` with `Card` and `ListTile` widgets.
+
+### Program
+```dart
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(home: PostsPage());
+  }
+}
+
+class PostsPage extends StatelessWidget {
+  Future<List<dynamic>> fetchPosts() async {
+    final response = await http
+        .get(Uri.parse("https://jsonplaceholder.typicode.com/posts"));
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception("Failed to load posts");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Posts from API")),
+      body: FutureBuilder<List<dynamic>>(
+        future: fetchPosts(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text("Error: ${snapshot.error}"));
+          } else {
+            final posts = snapshot.data!;
+            return ListView.builder(
+              itemCount: posts.length,
+              itemBuilder: (context, index) {
+                final post = posts[index];
+                return Card(
+                  margin: EdgeInsets.all(10),
+                  child: ListTile(
+                    title: Text(post['title'],
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text(post['body']),
+                  ),
+                );
+              },
+            );
+          }
+        },
+      ),
+    );
+  }
+}
+```
+
+### Output
+A scrollable list of cards, each showing a post title in bold and its body below.
+
+*(Paste screenshot here)*
+
+### Result
+The fetched API data was displayed in the UI successfully.
+
+---
+
+# Experiment 10
+
+## 10(a) Write Unit Tests for UI Components
+
+### Aim
+To write unit (widget) tests for UI components in Flutter.
+
+### Description
+Flutter provides the `flutter_test` package. `testWidgets()` builds a widget in a test environment, `find` locates widgets, `tester.tap()` simulates a tap, and `expect()` checks the result. Test files are placed in the `test/` folder and run with `flutter test`.
 
 ### Program
 
-**src/ParentComponent.js** (holds the shared data)
-```jsx
-import React, { useState } from "react";
-import ChildA from "./ChildA";
-import ChildB from "./ChildB";
+**lib/main.dart**
+```dart
+import 'package:flutter/material.dart';
 
-function ParentComponent() {
-  const [message, setMessage] = useState("Hello from Parent!");
+void main() => runApp(MyApp());
 
-  const updateMessage = (newMsg) => {
-    setMessage(newMsg);
-  };
-
-  return (
-    <div style={{ border: "2px solid blue", padding: "10px", margin: "10px" }}>
-      <h2>Parent Component</h2>
-      <p>Shared Message: {message}</p>
-      <ChildA onUpdate={updateMessage} />
-      <ChildB message={message} />
-    </div>
-  );
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(home: Scaffold(body: Center(child: CounterWidget())));
+  }
 }
-export default ParentComponent;
+
+class CounterWidget extends StatefulWidget {
+  @override
+  _CounterWidgetState createState() => _CounterWidgetState();
+}
+
+class _CounterWidgetState extends State<CounterWidget> {
+  int _counter = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text('$_counter', style: TextStyle(fontSize: 32)),
+        ElevatedButton(
+          onPressed: () => setState(() => _counter++),
+          child: Text('Increment'),
+        ),
+      ],
+    );
+  }
+}
 ```
 
-**src/ChildA.js** (sends data to parent)
-```jsx
-import React, { useState } from "react";
+**test/widget_test.dart**
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:my_app/main.dart'; // replace my_app with your project name
 
-function ChildA({ onUpdate }) {
-  const [inputValue, setInputValue] = useState("");
+void main() {
+  testWidgets('Counter starts at 0', (WidgetTester tester) async {
+    await tester.pumpWidget(MyApp());
+    expect(find.text('0'), findsOneWidget);
+  });
 
-  return (
-    <div style={{ border: "2px solid green", padding: "10px", margin: "10px" }}>
-      <h3>Child A (Sender)</h3>
-      <input
-        type="text"
-        placeholder="Type message for Child B"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-      />
-      <button onClick={() => onUpdate(inputValue)}>Send</button>
-    </div>
-  );
+  testWidgets('Counter increments when button is pressed',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(MyApp());
+    await tester.tap(find.text('Increment'));
+    await tester.pump();
+    expect(find.text('1'), findsOneWidget);
+  });
 }
-export default ChildA;
 ```
 
-**src/ChildB.js** (receives data from parent)
-```jsx
-import React from "react";
-
-function ChildB({ message }) {
-  return (
-    <div style={{ border: "2px solid red", padding: "10px", margin: "10px" }}>
-      <h3>Child B (Receiver)</h3>
-      <p>Received Message: {message}</p>
-    </div>
-  );
-}
-export default ChildB;
+Run the tests using:
 ```
-
-**src/App.js** (main file)
-```jsx
-import React from "react";
-import ParentComponent from "./ParentComponent";
-
-function App() {
-  return (
-    <div>
-      <h1>React – Sharing Data Between Components</h1>
-      <ParentComponent />
-    </div>
-  );
-}
-export default App;
+flutter test
 ```
 
 ### Output
-
-**Initial screen**
 ```
-React – Sharing Data Between Components
-
-Parent Component
-Shared Message: Hello from Parent!
-
-  Child A (Sender)
-  [ Type message for Child B ]  [ Send ]
-
-  Child B (Receiver)
-  Received Message: Hello from Parent!
-```
-
-**After typing "Welcome to React" in Child A and clicking Send**
-```
-Parent Component
-Shared Message: Welcome to React
-
-  Child A (Sender)
-  [ Welcome to React ]  [ Send ]
-
-  Child B (Receiver)
-  Received Message: Welcome to React
+00:02 +2: All tests passed!
 ```
 
 ### Result
-Data was shared successfully: Child A sent the message to the Parent through a callback, and the Parent passed it to Child B through props.
+Unit tests for UI components were written and executed successfully.
 
 ---
 
-# Program 11: MongoDB – Databases, Collections and Records
-
-## 11a. Create and Drop Databases and Collections
+## 10(b) Use Flutter's Debugging Tools to Identify and Fix Issues
 
 ### Aim
-To write MongoDB queries to create and drop databases and collections.
+To use Flutter's debugging tools to identify and fix issues.
 
 ### Description
-MongoDB is a NoSQL database that stores data as documents inside collections. A database is created when you switch to it and insert data into it. Collections can be created explicitly with `createCollection()` and removed with `drop()`. A whole database is removed with `dropDatabase()`.
+Flutter provides these debugging tools:
+- **debugPrint():** prints messages to the console.
+- **assert():** checks a condition in debug mode and throws an error if it fails.
+- **Flutter DevTools** (Widget Inspector, Debug Console, Performance view).
+- **Hot reload** to quickly test fixes.
 
-### Queries and Output
+In this program the counter can wrongly become negative. The `assert` catches this bug, and the fix is to stop decrementing at 0.
 
-**1. Create a database**
-```js
-use myDatabase
-```
-Output:
-```
-switched to db myDatabase
-```
+### Program
+```dart
+import 'package:flutter/material.dart';
 
-**2. Create a collection**
-```js
-db.createCollection("myCollection")
-```
-Output:
-```
-{ ok: 1 }
-```
+void main() => runApp(MyApp());
 
-**3. Drop a collection**
-```js
-db.myCollection.drop()
-```
-Output:
-```
-true
-```
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text('Flutter Debug Demo')),
+        body: DebugDemoWidget(),
+      ),
+    );
+  }
+}
 
-**4. Drop a database**
-```js
-db.dropDatabase()
-```
-Output:
-```
-{ ok: 1, dropped: 'myDatabase' }
-```
+class DebugDemoWidget extends StatefulWidget {
+  @override
+  _DebugDemoWidgetState createState() => _DebugDemoWidgetState();
+}
 
-### Result
-The database and collection were created and dropped successfully.
+class _DebugDemoWidgetState extends State<DebugDemoWidget> {
+  int _counter = 0;
 
----
+  void _increment() {
+    setState(() => _counter++);
+    debugPrint('Counter incremented: $_counter');
+  }
 
-## 11b. Working with Records: find(), limit(), sort(), createIndex(), aggregate()
+  void _decrement() {
+    // BUG: counter can become negative.
+    // FIX: only decrement when counter > 0.
+    if (_counter > 0) {
+      setState(() => _counter--);
+    }
+    debugPrint('Counter decremented: $_counter');
+    assert(_counter >= 0, 'Counter should not be negative!');
+  }
 
-### Aim
-To write MongoDB queries to work with records using `find()`, `limit()`, `sort()`, `createIndex()` and `aggregate()`.
-
-### Description
-
-| Method | Purpose |
-|---|---|
-| `find()` | Retrieves documents from a collection |
-| `sort()` | Arranges documents by one or more fields (`1` = ascending, `-1` = descending) |
-| `createIndex()` | Creates an index to speed up searching and retrieval |
-| `aggregate()` | Processes data through a pipeline and returns computed results (sum, avg, count, min, max) |
-| `limit()` | Restricts the number of documents returned |
-
-### Insert sample data
-```js
-db.EX7.insertMany([
-  { name: "Alice",   age: 25, status: "A" },
-  { name: "Bob",     age: 30, status: "B" },
-  { name: "Charlie", age: 35, status: "A" },
-  { name: "David",   age: 40, status: "B" },
-  { name: "Eve",     age: 45, status: "A" },
-  { name: "Frank",   age: 50, status: "B" },
-  { name: "Grace",   age: 55, status: "A" },
-  { name: "Hank",    age: 60, status: "B" },
-  { name: "Irene",   age: 65, status: "A" },
-  { name: "Jack",    age: 70, status: "B" }
-])
-```
-Output:
-```
-{
-  acknowledged: true,
-  insertedIds: {
-    '0': ObjectId('...'),
-    '1': ObjectId('...'),
-    ...
-    '9': ObjectId('...')
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Counter: $_counter', style: TextStyle(fontSize: 28)),
+          SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(onPressed: _increment, child: Text('Increment')),
+              SizedBox(width: 10),
+              ElevatedButton(onPressed: _decrement, child: Text('Decrement')),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
 ```
 
-### 1. find()
-**Syntax:** `db.collection.find(query)`
+### Output
+- The Debug Console shows messages such as `Counter incremented: 1`.
+- Before the fix, pressing Decrement at 0 trips the assertion error "Counter should not be negative!".
+- After the fix, the counter stays at 0.
 
-Query:
-```js
-db.EX7.find({ status: "A" })
-```
-Output:
-```
-{ name: 'Alice',   age: 25, status: 'A' }
-{ name: 'Charlie', age: 35, status: 'A' }
-{ name: 'Eve',     age: 45, status: 'A' }
-{ name: 'Grace',   age: 55, status: 'A' }
-{ name: 'Irene',   age: 65, status: 'A' }
-```
-
-### 2. sort()
-**Syntax:** `db.collection.find().sort({ field: 1 })`
-- `1` → ascending order (smallest to largest, A–Z)
-- `-1` → descending order (largest to smallest, Z–A)
-
-Query:
-```js
-db.EX7.find().sort({ age: 1 })
-```
-Output:
-```
-{ name: 'Alice',   age: 25, status: 'A' }
-{ name: 'Bob',     age: 30, status: 'B' }
-{ name: 'Charlie', age: 35, status: 'A' }
-{ name: 'David',   age: 40, status: 'B' }
-{ name: 'Eve',     age: 45, status: 'A' }
-{ name: 'Frank',   age: 50, status: 'B' }
-{ name: 'Grace',   age: 55, status: 'A' }
-{ name: 'Hank',    age: 60, status: 'B' }
-{ name: 'Irene',   age: 65, status: 'A' }
-{ name: 'Jack',    age: 70, status: 'B' }
-```
-
-### 3. createIndex()
-Indexing improves the speed of searching and retrieving documents. An index stores the values of a specific field in an organized structure, so MongoDB can find matching records without scanning the entire collection.
-
-**Syntax:** `db.collection.createIndex({ field: 1 })`
-- `1` → ascending index
-- `-1` → descending index
-
-Query:
-```js
-db.EX7.createIndex({ age: 1 })
-```
-Output:
-```
-age_1
-```
-
-To verify the index:
-```js
-db.EX7.getIndexes()
-```
-Output:
-```
-[
-  { v: 2, key: { _id: 1 }, name: '_id_' },
-  { v: 2, key: { age: 1 }, name: 'age_1' }
-]
-```
-
-### 4. aggregate()
-Aggregation processes data from multiple documents and returns computed results. It can group documents by a field and perform operations such as sum, average, count, minimum and maximum.
-
-**Syntax:**
-```js
-db.collection.aggregate([
-  { $stage1: { ... } },
-  { $stage2: { ... } }
-])
-```
-
-Query:
-```js
-db.EX7.aggregate([
-  {
-    $group: {
-      _id: "$status",
-      averageAge: { $avg: "$age" },
-      count: { $sum: 1 }
-    }
-  }
-])
-```
-Output:
-```
-{ _id: 'A', averageAge: 45, count: 5 }
-{ _id: 'B', averageAge: 50, count: 5 }
-```
-
-### 5. limit()
-The `limit()` method restricts the number of documents returned by a query.
-
-**Syntax:** `db.collection.find().limit(number)`
-
-Query:
-```js
-db.EX7.find().limit(3)
-```
-Output:
-```
-[
-  {
-    _id: ObjectId('64f24c5e9a2b3f001e3a0001'),
-    name: 'Alice',
-    age: 25,
-    status: 'A'
-  },
-  {
-    _id: ObjectId('64f24c5e9a2b3f001e3a0002'),
-    name: 'Bob',
-    age: 30,
-    status: 'B'
-  },
-  {
-    _id: ObjectId('64f24c5e9a2b3f001e3a0003'),
-    name: 'Charlie',
-    age: 35,
-    status: 'A'
-  }
-]
-```
+*(Paste screenshot here)*
 
 ### Result
-The MongoDB queries using `find()`, `sort()`, `createIndex()`, `aggregate()` and `limit()` were executed successfully and the expected output was obtained.
+Flutter debugging tools were used to identify and fix the issue successfully.
